@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IODE - Institute of Open and Distance Education</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#3b82f6',secondary:'#64748b'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+body {
+font-family: 'Inter', sans-serif;
+}
+.custom-checkbox {
+position: relative;
+display: inline-block;
+width: 18px;
+height: 18px;
+margin-right: 8px;
+}
+.custom-checkbox input {
+opacity: 0;
+width: 0;
+height: 0;
+}
+.checkmark {
+position: absolute;
+top: 0;
+left: 0;
+height: 18px;
+width: 18px;
+background-color: #fff;
+border: 2px solid #d1d5db;
+border-radius: 4px;
+}
+.custom-checkbox input:checked ~ .checkmark {
+background-color: #3b82f6;
+border-color: #3b82f6;
+}
+.checkmark:after {
+content: "";
+position: absolute;
+display: none;
+}
+.custom-checkbox input:checked ~ .checkmark:after {
+display: block;
+}
+.custom-checkbox .checkmark:after {
+left: 5px;
+top: 2px;
+width: 6px;
+height: 10px;
+border: solid white;
+border-width: 0 2px 2px 0;
+transform: rotate(45deg);
+}
+.custom-switch {
+position: relative;
+display: inline-block;
+width: 44px;
+height: 24px;
+}
+.custom-switch input {
+opacity: 0;
+width: 0;
+height: 0;
+}
+.slider {
+position: absolute;
+cursor: pointer;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background-color: #e5e7eb;
+transition: .4s;
+border-radius: 24px;
+}
+.slider:before {
+position: absolute;
+content: "";
+height: 18px;
+width: 18px;
+left: 3px;
+bottom: 3px;
+background-color: white;
+transition: .4s;
+border-radius: 50%;
+}
+input:checked + .slider {
+background-color: #3b82f6;
+}
+input:checked + .slider:before {
+transform: translateX(20px);
+}
+input[type="range"] {
+-webkit-appearance: none;
+appearance: none;
+width: 100%;
+height: 6px;
+background: #e5e7eb;
+border-radius: 5px;
+outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+-webkit-appearance: none;
+appearance: none;
+width: 18px;
+height: 18px;
+background: #3b82f6;
+cursor: pointer;
+border-radius: 50%;
+}
+input[type="range"]::-moz-range-thumb {
+width: 18px;
+height: 18px;
+background: #3b82f6;
+cursor: pointer;
+border-radius: 50%;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+.custom-radio {
+position: relative;
+display: inline-block;
+width: 18px;
+height: 18px;
+margin-right: 8px;
+}
+.custom-radio input {
+opacity: 0;
+width: 0;
+height: 0;
+}
+.radio-mark {
+position: absolute;
+top: 0;
+left: 0;
+height: 18px;
+width: 18px;
+background-color: #fff;
+border: 2px solid #d1d5db;
+border-radius: 50%;
+}
+.custom-radio input:checked ~ .radio-mark {
+border-color: #3b82f6;
+}
+.radio-mark:after {
+content: "";
+position: absolute;
+display: none;
+top: 3px;
+left: 3px;
+width: 8px;
+height: 8px;
+border-radius: 50%;
+background: #3b82f6;
+}
+.custom-radio input:checked ~ .radio-mark:after {
+display: block;
+}
+.dropdown-content {
+display: none;
+position: absolute;
+background-color: white;
+min-width: 160px;
+box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+z-index: 1;
+border-radius: 8px;
+overflow: hidden;
+}
+.dropdown-content a {
+color: #1f2937;
+padding: 12px 16px;
+text-decoration: none;
+display: block;
+}
+.dropdown-content a:hover {
+background-color: #f3f4f6;
+}
+.show {
+display: block;
+}
+</style>
+</head>
+<body class="bg-gray-50">
+<!-- Header -->
+<header class="bg-white shadow-sm sticky top-0 z-50">
+<div class="container mx-auto px-4 py-4 flex items-center justify-between">
+<div class="flex items-center">
+<a href="#" class="text-3xl font-['Pacifico'] text-primary">IODE</a>
+<span class="ml-2 text-sm text-gray-600 hidden md:inline-block">Institute of Open and Distance Education</span>
+</div>
+<nav class="hidden md:flex items-center space-x-8">
+<a href="#" class="text-primary font-medium">Home</a>
+<a href="#" class="text-gray-700 hover:text-primary transition">About</a>
+<a href="#" class="text-gray-700 hover:text-primary transition">Courses</a>
+<a href="#" class="text-gray-700 hover:text-primary transition">Admissions</a>
+<a href="#" class="text-gray-700 hover:text-primary transition">Downloads</a>
+<a href="#" class="text-gray-700 hover:text-primary transition">Contact</a>
+<a href="#" class="text-gray-700 hover:text-primary transition">FAQ</a>
+</nav>
+<div class="flex items-center space-x-4">
+<button id="student-portal-btn" class="bg-primary text-white px-4 py-2 !rounded-button whitespace-nowrap hidden md:block">Student Portal</button>
+<!-- Login Modal -->
+<div id="login-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+<div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-xl font-semibold text-gray-900">Student Login</h3>
+<button id="close-login-modal" class="text-gray-400 hover:text-gray-500">
+<i class="ri-close-line ri-lg"></i>
+</button>
+</div>
+<form id="login-form" class="space-y-4">
+<div>
+<label class="block text-gray-700 text-sm font-medium mb-2" for="student-id">Student ID</label>
+<input type="text" id="student-id" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary" placeholder="Enter your student ID">
+</div>
+<div>
+<label class="block text-gray-700 text-sm font-medium mb-2" for="password">Password</label>
+<input type="password" id="password" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary" placeholder="Enter your password">
+</div>
+<div id="login-error" class="hidden text-red-500 text-sm"></div>
+<button type="submit" class="w-full bg-primary text-white px-4 py-3 !rounded-button whitespace-nowrap font-medium flex items-center justify-center">
+<span>Login</span>
+<div id="login-spinner" class="hidden ml-2">
+<i class="ri-loader-4-line animate-spin"></i>
+</div>
+</button>
+</form>
+</div>
+</div>
+<div class="w-10 h-10 flex items-center justify-center md:hidden cursor-pointer" id="mobile-menu-button">
+<i class="ri-menu-line ri-lg"></i>
+</div>
+</div>
+</div>
+<!-- Mobile Menu -->
+<div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+<div class="container mx-auto px-4 py-2">
+<nav class="flex flex-col space-y-3 py-3">
+<a href="#" class="text-primary font-medium py-2">Home</a>
+<a href="#" class="text-gray-700 hover:text-primary transition py-2">About</a>
+<a href="#" class="text-gray-700 hover:text-primary transition py-2">Courses</a>
+<a href="#" class="text-gray-700 hover:text-primary transition py-2">Admissions</a>
+<a href="#" class="text-gray-700 hover:text-primary transition py-2">Downloads</a>
+<a href="#" class="text-gray-700 hover:text-primary transition py-2">Contact</a>
+<a href="#" class="text-gray-700 hover:text-primary transition py-2">FAQ</a>
+<button id="mobile-student-portal-btn" class="bg-primary text-white px-4 py-2 !rounded-button whitespace-nowrap w-full mt-2">Student Portal</button>
+</nav>
+</div>
+</div>
+</header>
+<!-- Hero Section -->
+<section class="relative">
+<div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://readdy.ai/api/search-image?query=Modern%20university%20campus%20with%20students%20studying%20outdoors%2C%20educational%20buildings%20in%20background%2C%20digital%20learning%20concept%2C%20bright%20sunny%20day%2C%20open%20spaces%20with%20trees%2C%20professional%20academic%20environment%2C%20high-quality%20education&width=1920&height=800&seq=1&orientation=landscape'); opacity: 0.9;"></div>
+<div class="absolute inset-0 bg-gradient-to-r from-white via-white/90 to-transparent"></div>
+<div class="container mx-auto px-4 py-20 md:py-32 relative z-10">
+<div class="max-w-2xl">
+<h1 class="text-3xl md:text-5xl font-bold text-gray-900 mb-6">Empowering Education Through Distance Learning</h1>
+<p class="text-lg md:text-xl text-gray-700 mb-8">The Institute of Open and Distance Education (IODE) is dedicated to providing accessible and affordable education, empowering students from all backgrounds to pursue their academic dreams.</p>
+<div class="flex flex-col sm:flex-row gap-4">
+<button class="bg-primary text-white px-6 py-3 !rounded-button whitespace-nowrap font-medium">Explore Courses</button>
+<button class="bg-white text-primary border border-primary px-6 py-3 !rounded-button whitespace-nowrap font-medium">Start Application</button>
+</div>
+<div class="mt-10 flex items-center space-x-6">
+<div class="flex items-center">
+<div class="w-10 h-10 flex items-center justify-center bg-blue-100 rounded-full">
+<i class="ri-government-line ri-lg text-primary"></i>
+</div>
+<span class="ml-2 text-gray-700">UGC Approved</span>
+</div>
+<div class="flex items-center">
+<div class="w-10 h-10 flex items-center justify-center bg-blue-100 rounded-full">
+<i class="ri-graduation-cap-line ri-lg text-primary"></i>
+</div>
+<span class="ml-2 text-gray-700">10,000+ Graduates</span>
+</div>
+<div class="flex items-center">
+<div class="w-10 h-10 flex items-center justify-center bg-blue-100 rounded-full">
+<i class="ri-building-line ri-lg text-primary"></i>
+</div>
+<span class="ml-2 text-gray-700">Delhi-based</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Features Section -->
+<section class="py-16 bg-white">
+<div class="container mx-auto px-4">
+<div class="text-center mb-12">
+<h2 class="text-3xl font-bold text-gray-900 mb-4">Why Choose IODE?</h2>
+<p class="text-lg text-gray-600 max-w-3xl mx-auto">Our unique approach to distance education combines flexibility with quality, making higher education accessible to everyone.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+<div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition">
+<div class="w-14 h-14 flex items-center justify-center bg-blue-100 rounded-full mb-4">
+<i class="ri-computer-line ri-xl text-primary"></i>
+</div>
+<h3 class="text-xl font-semibold text-gray-900 mb-2">Online Course Access</h3>
+<p class="text-gray-600">Access your course materials anytime, anywhere through our digital learning platform.</p>
+</div>
+<div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition">
+<div class="w-14 h-14 flex items-center justify-center bg-blue-100 rounded-full mb-4">
+<i class="ri-file-pdf-line ri-xl text-primary"></i>
+</div>
+<h3 class="text-xl font-semibold text-gray-900 mb-2">Study Material PDFs</h3>
+<p class="text-gray-600">Download comprehensive study materials designed by expert educators in your field.</p>
+</div>
+<div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition">
+<div class="w-14 h-14 flex items-center justify-center bg-blue-100 rounded-full mb-4">
+<i class="ri-file-list-3-line ri-xl text-primary"></i>
+</div>
+<h3 class="text-xl font-semibold text-gray-900 mb-2">Digital Certificates</h3>
+<p class="text-gray-600">Receive digital marksheets and certificates that are secure and easily verifiable.</p>
+</div>
+<div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition">
+<div class="w-14 h-14 flex items-center justify-center bg-blue-100 rounded-full mb-4">
+<i class="ri-customer-service-2-line ri-xl text-primary"></i>
+</div>
+<h3 class="text-xl font-semibold text-gray-900 mb-2">Student Support</h3>
+<p class="text-gray-600">Get fast and responsive support from our dedicated student services team.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- About Section -->
+<section class="py-16 bg-gray-50">
+<div class="container mx-auto px-4">
+<div class="flex flex-col lg:flex-row gap-12 items-center">
+<div class="lg:w-1/2">
+<img src="https://readdy.ai/api/search-image?query=Modern%20educational%20institute%20building%20with%20glass%20facade%2C%20students%20walking%20around%20campus%2C%20digital%20learning%20environment%2C%20professional%20academic%20setting%2C%20bright%20day%20with%20blue%20sky%2C%20trees%20and%20landscaped%20gardens&width=600&height=400&seq=2&orientation=landscape" alt="IODE Campus" class="rounded-lg shadow-md w-full object-cover h-[400px] object-top">
+</div>
+<div class="lg:w-1/2">
+<h2 class="text-3xl font-bold text-gray-900 mb-6">About IODE</h2>
+<p class="text-gray-700 mb-4">The Institute of Open and Distance Education (IODE) is a Delhi-based education platform dedicated to providing accessible and affordable education through distance mode. We empower students—especially those from rural and working backgrounds—to pursue bachelor's and master's degrees in a flexible format.</p>
+<div class="mb-6">
+<h3 class="text-xl font-semibold text-gray-900 mb-3">Our Vision</h3>
+<p class="text-gray-700 italic">"To become India's leading platform for inclusive and accessible distance education, nurturing knowledge and skill in every corner of the country."</p>
+</div>
+<div class="mb-6">
+<h3 class="text-xl font-semibold text-gray-900 mb-3">Our Mission</h3>
+<ul class="space-y-2 text-gray-700">
+<li class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center mt-1 mr-2">
+<i class="ri-check-line text-primary"></i>
+</div>
+<span>Deliver quality education in a flexible mode</span>
+</li>
+<li class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center mt-1 mr-2">
+<i class="ri-check-line text-primary"></i>
+</div>
+<span>Digitally support students with modern tools</span>
+</li>
+<li class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center mt-1 mr-2">
+<i class="ri-check-line text-primary"></i>
+</div>
+<span>Offer career-relevant UG/PG programs</span>
+</li>
+<li class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center mt-1 mr-2">
+<i class="ri-check-line text-primary"></i>
+</div>
+<span>Bridge the gap between traditional learning and modern needs</span>
+</li>
+</ul>
+</div>
+<button class="bg-primary text-white px-6 py-3 !rounded-button whitespace-nowrap font-medium">Learn More About Us</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Courses Section -->
+<section class="py-16 bg-white">
+<div class="container mx-auto px-4">
+<div class="text-center mb-12">
+<h2 class="text-3xl font-bold text-gray-900 mb-4">Our Courses</h2>
+<p class="text-lg text-gray-600 max-w-3xl mx-auto">Explore our wide range of undergraduate and postgraduate programs designed to help you achieve your academic and career goals.</p>
+</div>
+<div class="flex justify-center mb-8">
+<div class="inline-flex bg-gray-100 p-1 rounded-full">
+<button class="px-6 py-2 rounded-full bg-primary text-white whitespace-nowrap">Undergraduate</button>
+<button class="px-6 py-2 rounded-full text-gray-700 whitespace-nowrap">Postgraduate</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition">
+<div class="h-48 overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=Business%20management%20students%20in%20modern%20classroom%2C%20professional%20setting%2C%20business%20charts%20and%20presentations%2C%20corporate%20atmosphere%2C%20students%20taking%20notes%2C%20professional%20attire%2C%20bright%20lighting&width=400&height=250&seq=3&orientation=landscape" alt="Bachelor of Business Administration" class="w-full h-full object-cover object-top">
+</div>
+<div class="p-6">
+<div class="flex justify-between items-center mb-3">
+<span class="bg-blue-100 text-primary text-xs font-medium px-3 py-1 rounded-full">3 Years</span>
+<span class="text-gray-500 text-sm">UG Program</span>
+</div>
+<h3 class="text-xl font-semibold text-gray-900 mb-2">Bachelor of Business Administration (BBA)</h3>
+<p class="text-gray-600 mb-4">Develop essential business skills and knowledge to excel in corporate management and entrepreneurship.</p>
+<div class="flex justify-between items-center">
+<span class="text-primary font-semibold">₹45,000/year</span>
+<button class="text-primary font-medium flex items-center">
+View Details
+<i class="ri-arrow-right-line ml-1"></i>
+</button>
+</div>
+</div>
+</div>
+<div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition">
+<div class="h-48 overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=Computer%20science%20students%20in%20modern%20lab%20with%20computers%2C%20coding%20on%20screens%2C%20professional%20IT%20environment%2C%20students%20collaborating%20on%20projects%2C%20bright%20modern%20classroom%20with%20technology&width=400&height=250&seq=4&orientation=landscape" alt="Bachelor of Computer Applications" class="w-full h-full object-cover object-top">
+</div>
+<div class="p-6">
+<div class="flex justify-between items-center mb-3">
+<span class="bg-blue-100 text-primary text-xs font-medium px-3 py-1 rounded-full">3 Years</span>
+<span class="text-gray-500 text-sm">UG Program</span>
+</div>
+<h3 class="text-xl font-semibold text-gray-900 mb-2">Bachelor of Computer Applications (BCA)</h3>
+<p class="text-gray-600 mb-4">Master computer applications and programming skills to pursue a career in the IT industry.</p>
+<div class="flex justify-between items-center">
+<span class="text-primary font-semibold">₹50,000/year</span>
+<button class="text-primary font-medium flex items-center">
+View Details
+<i class="ri-arrow-right-line ml-1"></i>
+</button>
+</div>
+</div>
+</div>
+<div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition">
+<div class="h-48 overflow-hidden">
+<img src="https://readdy.ai/api/search-image?query=Arts%20students%20in%20university%20classroom%2C%20literature%20discussion%2C%20humanities%20education%2C%20students%20with%20books%2C%20professor%20explaining%20concepts%2C%20bright%20academic%20environment%2C%20diverse%20student%20group&width=400&height=250&seq=5&orientation=landscape" alt="Bachelor of Arts" class="w-full h-full object-cover object-top">
+</div>
+<div class="p-6">
+<div class="flex justify-between items-center mb-3">
+<span class="bg-blue-100 text-primary text-xs font-medium px-3 py-1 rounded-full">3 Years</span>
+<span class="text-gray-500 text-sm">UG Program</span>
+</div>
+<h3 class="text-xl font-semibold text-gray-900 mb-2">Bachelor of Arts (BA)</h3>
+<p class="text-gray-600 mb-4">Explore humanities and social sciences with specializations in various disciplines.</p>
+<div class="flex justify-between items-center">
+<span class="text-primary font-semibold">₹35,000/year</span>
+<button class="text-primary font-medium flex items-center">
+View Details
+<i class="ri-arrow-right-line ml-1"></i>
+</button>
+</div>
+</div>
+</div>
+</div>
+<div class="text-center mt-10">
+<button class="bg-white text-primary border border-primary px-6 py-3 !rounded-button whitespace-nowrap font-medium">View All Courses</button>
+</div>
+</div>
+</section>
+<!-- Admission Process -->
+<section class="py-16 bg-gray-50">
+<div class="container mx-auto px-4">
+<div class="text-center mb-12">
+<h2 class="text-3xl font-bold text-gray-900 mb-4">Admission Process</h2>
+<p class="text-lg text-gray-600 max-w-3xl mx-auto">Our streamlined admission process makes it easy to start your educational journey with IODE.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+<div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center">
+<div class="w-16 h-16 flex items-center justify-center bg-blue-100 rounded-full mx-auto mb-4">
+<span class="text-primary font-bold text-xl">1</span>
+</div>
+<h3 class="text-xl font-semibold text-gray-900 mb-2">Online Application</h3>
+<p class="text-gray-600">Fill out the online application form with your personal and academic details.</p>
+</div>
+<div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center">
+<div class="w-16 h-16 flex items-center justify-center bg-blue-100 rounded-full mx-auto mb-4">
+<span class="text-primary font-bold text-xl">2</span>
+</div>
+<h3 class="text-xl font-semibold text-gray-900 mb-2">Document Upload</h3>
+<p class="text-gray-600">Upload required documents including academic certificates and ID proof.</p>
+</div>
+<div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center">
+<div class="w-16 h-16 flex items-center justify-center bg-blue-100 rounded-full mx-auto mb-4">
+<span class="text-primary font-bold text-xl">3</span>
+</div>
+<h3 class="text-xl font-semibold text-gray-900 mb-2">Fee Payment</h3>
+<p class="text-gray-600">Pay the application and course fees through our secure payment gateway.</p>
+</div>
+<div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center">
+<div class="w-16 h-16 flex items-center justify-center bg-blue-100 rounded-full mx-auto mb-4">
+<span class="text-primary font-bold text-xl">4</span>
+</div>
+<h3 class="text-xl font-semibold text-gray-900 mb-2">Enrollment</h3>
+<p class="text-gray-600">Receive your enrollment confirmation and start accessing course materials.</p>
+</div>
+</div>
+<div class="text-center mt-10">
+<button class="bg-primary text-white px-6 py-3 !rounded-button whitespace-nowrap font-medium">Start Application Now</button>
+</div>
+</div>
+</section>
+<!-- Student Portal Section -->
+<section class="py-16 bg-white">
+<div class="container mx-auto px-4">
+<div class="flex flex-col lg:flex-row gap-12 items-center">
+<div class="lg:w-1/2">
+<h2 class="text-3xl font-bold text-gray-900 mb-6">Student Service Portal</h2>
+<p class="text-gray-700 mb-6">Our secure student portal provides easy access to all your academic needs. Check results, download marksheets, and access study materials all in one place.</p>
+<div class="space-y-4 mb-8">
+<div class="flex items-start">
+<div class="w-10 h-10 flex items-center justify-center bg-blue-100 rounded-full mt-1 mr-4">
+<i class="ri-file-chart-line ri-lg text-primary"></i>
+</div>
+<div>
+<h3 class="text-lg font-semibold text-gray-900 mb-1">Result Checker</h3>
+<p class="text-gray-600">View your semester results and performance analytics.</p>
+</div>
+</div>
+<div class="flex items-start">
+<div class="w-10 h-10 flex items-center justify-center bg-blue-100 rounded-full mt-1 mr-4">
+<i class="ri-file-download-line ri-lg text-primary"></i>
+</div>
+<div>
+<h3 class="text-lg font-semibold text-gray-900 mb-1">Document Downloads</h3>
+<p class="text-gray-600">Access study materials, admit cards, and academic calendars.</p>
+</div>
+</div>
+<div class="flex items-start">
+<div class="w-10 h-10 flex items-center justify-center bg-blue-100 rounded-full mt-1 mr-4">
+<i class="ri-file-pdf-line ri-lg text-primary"></i>
+</div>
+<div>
+<h3 class="text-lg font-semibold text-gray-900 mb-1">Digital Marksheets</h3>
+<p class="text-gray-600">Download official marksheets and certificates in PDF format.</p>
+</div>
+</div>
+</div>
+<button id="portal-login-btn" class="bg-primary text-white px-6 py-3 !rounded-button whitespace-nowrap font-medium">Login to Student Portal</button>
+</div>
+<div class="lg:w-1/2 bg-white p-8 rounded-lg shadow-md border border-gray-100">
+<h3 class="text-xl font-semibold text-gray-900 mb-3">Result Checker</h3>
+<div class="mb-6 bg-blue-50 p-4 rounded-lg">
+<p class="text-gray-700 mb-3">Enter your details to check your result instantly!</p>
+<p class="text-gray-600 text-sm mb-3">This tool automatically generates a customized result based on your input — whether it's your name, roll number, or email. You'll receive a realistic marksheet with your name, subjects, marks, grade, and even official-looking signatures and stamped format — just like an authentic result sheet.</p>
+<p class="text-gray-700 text-sm flex items-center">
+<i class="ri-pencil-line mr-2 text-primary"></i>
+Just enter your details and let the magic happen!
+</p>
+</div>
+<form class="space-y-4">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div>
+<label class="block text-gray-700 text-sm font-medium mb-2" for="year">Select Year</label>
+<div class="relative">
+<select id="year" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary pr-8">
+<option value="">Select Year</option>
+<option value="2025">2025</option>
+<option value="2024">2024</option>
+<option value="2023">2023</option>
+</select>
+<div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+<i class="ri-arrow-down-s-line text-gray-400"></i>
+</div>
+</div>
+</div>
+<div>
+<label class="block text-gray-700 text-sm font-medium mb-2" for="program">Select Program</label>
+<div class="relative">
+<select id="program" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary pr-8">
+<option value="">Select Program</option>
+<option value="BA">BA</option>
+<option value="BBA">BBA</option>
+<option value="BCA">BCA</option>
+<option value="MA">MA</option>
+<option value="MBA">MBA</option>
+<option value="MCA">MCA</option>
+</select>
+<div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+<i class="ri-arrow-down-s-line text-gray-400"></i>
+</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div>
+<label class="block text-gray-700 text-sm font-medium mb-2" for="semester">Select Semester</label>
+<div class="relative">
+<select id="semester" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary pr-8">
+<option value="">Select Semester</option>
+<option value="1">Semester 1</option>
+<option value="2">Semester 2</option>
+<option value="3">Semester 3</option>
+<option value="4">Semester 4</option>
+<option value="5">Semester 5</option>
+<option value="6">Semester 6</option>
+</select>
+<div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+<i class="ri-arrow-down-s-line text-gray-400"></i>
+</div>
+</div>
+</div>
+<div>
+<label class="block text-gray-700 text-sm font-medium mb-2" for="roll-number">Roll Number</label>
+<input type="text" id="roll-number" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary" placeholder="e.g., IODE2024BA031">
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div>
+<label class="block text-gray-700 text-sm font-medium mb-2" for="student-name">Student Name</label>
+<input type="text" id="student-name" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary" placeholder="Enter your full name">
+</div>
+<div>
+<label class="block text-gray-700 text-sm font-medium mb-2" for="father-name">Father's Name</label>
+<input type="text" id="father-name" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary" placeholder="Enter father's name">
+</div>
+</div>
+<div class="flex gap-4">
+<button type="button" id="check-result-btn" class="flex-1 bg-primary text-white px-4 py-3 !rounded-button whitespace-nowrap font-medium flex items-center justify-center">
+<i class="ri-search-line mr-2"></i>
+<span>Check Result</span>
+<div id="loading-spinner" class="hidden ml-2">
+<i class="ri-loader-4-line animate-spin"></i>
+</div>
+</button>
+<button type="button" id="clear-form-btn" class="bg-white text-gray-700 border border-gray-300 px-4 py-3 !rounded-button whitespace-nowrap font-medium flex items-center justify-center hover:bg-gray-50">
+<i class="ri-refresh-line mr-2"></i>
+Clear Form
+</button>
+</div>
+<div id="validation-error" class="hidden mt-4 p-4 bg-red-50 text-red-700 rounded-lg"></div>
+</form>
+<div id="result-display" class="mt-8 hidden">
+<div class="bg-gray-50 p-8 rounded-lg mb-4">
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div>
+<p class="text-base text-gray-500">Name</p>
+<p class="text-lg font-medium" id="result-name"></p>
+</div>
+<div>
+<p class="text-base text-gray-500">Roll No</p>
+<p class="text-lg font-medium" id="result-roll"></p>
+</div>
+<div>
+<p class="text-base text-gray-500">Father's Name</p>
+<p class="text-lg font-medium" id="result-father"></p>
+</div>
+<div>
+<p class="text-base text-gray-500">Program</p>
+<p class="text-lg font-medium" id="result-program"></p>
+</div>
+<div class="col-span-2">
+<p class="text-base text-gray-500">Year / Semester</p>
+<p class="text-lg font-medium" id="result-semester"></p>
+</div>
+</div>
+<table class="w-full mb-4">
+<thead>
+<tr class="border-b border-gray-200">
+<th class="text-left py-2 text-gray-700">Subjects</th>
+<th class="text-center py-2 text-gray-700">Marks</th>
+<th class="text-center py-2 text-gray-700">Max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-gray-200">
+<td class="py-2">Indian Polity</td>
+<td class="text-center py-2">76</td>
+<td class="text-center py-2">100</td>
+</tr>
+<tr class="border-b border-gray-200">
+<td class="py-2">English Literature</td>
+<td class="text-center py-2">88</td>
+<td class="text-center py-2">100</td>
+</tr>
+<tr class="border-b border-gray-200">
+<td class="py-2">Economics</td>
+<td class="text-center py-2">82</td>
+<td class="text-center py-2">100</td>
+</tr>
+</tbody>
+</table>
+<div class="flex justify-between items-center">
+<div>
+<p class="font-medium">Total: <span class="text-primary">246/300</span></p>
+<p class="font-medium">Percentage: <span class="text-primary">82%</span></p>
+</div>
+<div class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+Pass
+</div>
+</div>
+</div>
+<button id="download-marksheet-btn" class="w-full bg-white text-primary border border-primary px-4 py-2 !rounded-button whitespace-nowrap font-medium flex items-center justify-center">
+<i class="ri-download-line mr-2"></i>
+Download Marksheet PDF
+</button>
+<div id="toast-container" class="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 hidden">
+<div class="bg-white shadow-lg rounded-lg px-4 py-3 flex items-center space-x-3">
+<i id="toast-icon" class="ri-checkbox-circle-line text-green-500 ri-lg"></i>
+<span id="toast-message" class="text-gray-800"></span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Downloads Section -->
+<section class="py-16 bg-gray-50">
+<div class="container mx-auto px-4">
+<div class="text-center mb-12">
+<h2 class="text-3xl font-bold text-gray-900 mb-4">Downloads</h2>
+<p class="text-lg text-gray-600 max-w-3xl mx-auto">Access important documents and resources for your academic journey.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+<div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition text-center">
+<div class="w-16 h-16 flex items-center justify-center bg-blue-100 rounded-full mx-auto mb-4">
+<i class="ri-book-open-line ri-xl text-primary"></i>
+</div>
+<h3 class="text-lg font-semibold text-gray-900 mb-2">Study Material</h3>
+<p class="text-gray-600 text-sm mb-4">Access course-specific study materials and resources.</p>
+<button class="text-primary font-medium flex items-center justify-center mx-auto">
+Download
+<i class="ri-download-line ml-1"></i>
+</button>
+</div>
+<div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition text-center">
+<div class="w-16 h-16 flex items-center justify-center bg-blue-100 rounded-full mx-auto mb-4">
+<i class="ri-calendar-line ri-xl text-primary"></i>
+</div>
+<h3 class="text-lg font-semibold text-gray-900 mb-2">Academic Calendar</h3>
+<p class="text-gray-600 text-sm mb-4">View important dates, exams, and events schedule.</p>
+<button class="text-primary font-medium flex items-center justify-center mx-auto">
+Download
+<i class="ri-download-line ml-1"></i>
+</button>
+</div>
+<div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition text-center">
+<div class="w-16 h-16 flex items-center justify-center bg-blue-100 rounded-full mx-auto mb-4">
+<i class="ri-file-list-3-line ri-xl text-primary"></i>
+</div>
+<h3 class="text-lg font-semibold text-gray-900 mb-2">Admit Cards</h3>
+<p class="text-gray-600 text-sm mb-4">Download your exam admit cards and hall tickets.</p>
+<button class="text-primary font-medium flex items-center justify-center mx-auto">
+Download
+<i class="ri-download-line ml-1"></i>
+</button>
+</div>
+<div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition text-center">
+<div class="w-16 h-16 flex items-center justify-center bg-blue-100 rounded-full mx-auto mb-4">
+<i class="ri-file-paper-2-line ri-xl text-primary"></i>
+</div>
+<h3 class="text-lg font-semibold text-gray-900 mb-2">Syllabus PDF</h3>
+<p class="text-gray-600 text-sm mb-4">Access detailed syllabus for all programs and courses.</p>
+<button class="text-primary font-medium flex items-center justify-center mx-auto">
+Download
+<i class="ri-download-line ml-1"></i>
+</button>
+</div>
+<div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition text-center">
+<div class="w-16 h-16 flex items-center justify-center bg-blue-100 rounded-full mx-auto mb-4">
+<i class="ri-file-text-line ri-xl text-primary"></i>
+</div>
+<h3 class="text-lg font-semibold text-gray-900 mb-2">Assignment Format</h3>
+<p class="text-gray-600 text-sm mb-4">Get templates and guidelines for assignment submission.</p>
+<button class="text-primary font-medium flex items-center justify-center mx-auto">
+Download
+<i class="ri-download-line ml-1"></i>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- FAQ Section -->
+<section class="py-16 bg-white">
+<div class="container mx-auto px-4">
+<div class="text-center mb-12">
+<h2 class="text-3xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
+<p class="text-lg text-gray-600 max-w-3xl mx-auto">Find answers to common questions about our programs, admission process, and more.</p>
+</div>
+<div class="max-w-3xl mx-auto">
+<div class="space-y-4">
+<div class="border border-gray-200 rounded-lg overflow-hidden">
+<button class="faq-toggle w-full flex justify-between items-center p-4 bg-white hover:bg-gray-50 transition">
+<span class="font-medium text-gray-900">How do I apply for admission to IODE?</span>
+<i class="ri-arrow-down-s-line text-gray-500 faq-icon"></i>
+</button>
+<div class="faq-content hidden p-4 pt-0 border-t border-gray-100">
+<p class="text-gray-600">You can apply for admission by visiting our website and filling out the online application form. After submitting the form, you'll need to upload the required documents and pay the application fee. Once your application is processed, you'll receive an enrollment confirmation.</p>
+</div>
+</div>
+<div class="border border-gray-200 rounded-lg overflow-hidden">
+<button class="faq-toggle w-full flex justify-between items-center p-4 bg-white hover:bg-gray-50 transition">
+<span class="font-medium text-gray-900">Are IODE degrees recognized by UGC?</span>
+<i class="ri-arrow-down-s-line text-gray-500 faq-icon"></i>
+</button>
+<div class="faq-content hidden p-4 pt-0 border-t border-gray-100">
+<p class="text-gray-600">Yes, all our programs are recognized by the University Grants Commission (UGC) and are valid for higher education and employment purposes throughout India and abroad.</p>
+</div>
+</div>
+<div class="border border-gray-200 rounded-lg overflow-hidden">
+<button class="faq-toggle w-full flex justify-between items-center p-4 bg-white hover:bg-gray-50 transition">
+<span class="font-medium text-gray-900">How do I access my study materials?</span>
+<i class="ri-arrow-down-s-line text-gray-500 faq-icon"></i>
+</button>
+<div class="faq-content hidden p-4 pt-0 border-t border-gray-100">
+<p class="text-gray-600">After enrollment, you can access all study materials through our student portal. We provide digital PDFs of course materials that you can download and study at your convenience. Physical copies can also be requested for an additional fee.</p>
+</div>
+</div>
+<div class="border border-gray-200 rounded-lg overflow-hidden">
+<button class="faq-toggle w-full flex justify-between items-center p-4 bg-white hover:bg-gray-50 transition">
+<span class="font-medium text-gray-900">What is the examination pattern?</span>
+<i class="ri-arrow-down-s-line text-gray-500 faq-icon"></i>
+</button>
+<div class="faq-content hidden p-4 pt-0 border-t border-gray-100">
+<p class="text-gray-600">We follow a semester-based examination system. Each semester has end-term examinations, and some courses may include assignments and practical assessments. The examination schedule is published in the academic calendar, and admit cards are issued before exams.</p>
+</div>
+</div>
+<div class="border border-gray-200 rounded-lg overflow-hidden">
+<button class="faq-toggle w-full flex justify-between items-center p-4 bg-white hover:bg-gray-50 transition">
+<span class="font-medium text-gray-900">Can I transfer credits from another university?</span>
+<i class="ri-arrow-down-s-line text-gray-500 faq-icon"></i>
+</button>
+<div class="faq-content hidden p-4 pt-0 border-t border-gray-100">
+<p class="text-gray-600">Yes, we do accept credit transfers from recognized universities subject to our academic committee's approval. You'll need to submit your previous marksheets and course details during the application process for evaluation.</p>
+</div>
+</div>
+</div>
+<div class="text-center mt-8">
+<p class="text-gray-600 mb-4">Still have questions? Feel free to contact our support team.</p>
+<button class="bg-primary text-white px-6 py-3 !rounded-button whitespace-nowrap font-medium">Contact Support</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Contact Section -->
+<section class="py-16 bg-gray-50">
+<div class="container mx-auto px-4">
+<div class="flex flex-col lg:flex-row gap-12">
+<div class="lg:w-1/2">
+<h2 class="text-3xl font-bold text-gray-900 mb-6">Get in Touch</h2>
+<p class="text-gray-700 mb-8">Have questions or need assistance? Contact our team for personalized support.</p>
+<div class="space-y-6 mb-8">
+<div class="flex items-start">
+<div class="w-10 h-10 flex items-center justify-center bg-blue-100 rounded-full mt-1 mr-4">
+<i class="ri-map-pin-line ri-lg text-primary"></i>
+</div>
+<div>
+<h3 class="text-lg font-semibold text-gray-900 mb-1">Our Location</h3>
+<p class="text-gray-600">Institute of Open and Distance Education<br>New Delhi, India</p>
+</div>
+</div>
+<div class="flex items-start">
+<div class="w-10 h-10 flex items-center justify-center bg-blue-100 rounded-full mt-1 mr-4">
+<i class="ri-phone-line ri-lg text-primary"></i>
+</div>
+<div>
+<h3 class="text-lg font-semibold text-gray-900 mb-1">Phone Number</h3>
+<p class="text-gray-600">+91-8800415257</p>
+</div>
+</div>
+<div class="flex items-start">
+<div class="w-10 h-10 flex items-center justify-center bg-blue-100 rounded-full mt-1 mr-4">
+<i class="ri-mail-line ri-lg text-primary"></i>
+</div>
+<div>
+<h3 class="text-lg font-semibold text-gray-900 mb-1">Email Address</h3>
+<p class="text-gray-600">iode.delhi@gmail.com</p>
+</div>
+</div>
+<div class="flex items-start">
+<div class="w-10 h-10 flex items-center justify-center bg-blue-100 rounded-full mt-1 mr-4">
+<i class="ri-time-line ri-lg text-primary"></i>
+</div>
+<div>
+<h3 class="text-lg font-semibold text-gray-900 mb-1">Working Hours</h3>
+<p class="text-gray-600">Monday - Saturday: 9:00 AM - 5:00 PM<br>Sunday: Closed</p>
+</div>
+</div>
+</div>
+<div class="flex space-x-4">
+<a href="#" class="w-10 h-10 flex items-center justify-center bg-primary text-white rounded-full hover:bg-primary/90 transition">
+<i class="ri-facebook-fill"></i>
+</a>
+<a href="#" class="w-10 h-10 flex items-center justify-center bg-primary text-white rounded-full hover:bg-primary/90 transition">
+<i class="ri-twitter-x-fill"></i>
+</a>
+<a href="#" class="w-10 h-10 flex items-center justify-center bg-primary text-white rounded-full hover:bg-primary/90 transition">
+<i class="ri-instagram-fill"></i>
+</a>
+<a href="#" class="w-10 h-10 flex items-center justify-center bg-primary text-white rounded-full hover:bg-primary/90 transition">
+<i class="ri-linkedin-fill"></i>
+</a>
+</div>
+</div>
+<div class="lg:w-1/2">
+<div class="bg-white p-8 rounded-lg shadow-sm border border-gray-100">
+<h3 class="text-xl font-semibold text-gray-900 mb-6">Send us a Message</h3>
+<form class="space-y-4">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div>
+<label class="block text-gray-700 text-sm font-medium mb-2" for="name">Your Name</label>
+<input type="text" id="name" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary" placeholder="Enter your name">
+</div>
+<div>
+<label class="block text-gray-700 text-sm font-medium mb-2" for="email">Email Address</label>
+<input type="email" id="email" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary" placeholder="Enter your email">
+</div>
+</div>
+<div>
+<label class="block text-gray-700 text-sm font-medium mb-2" for="phone">Phone Number</label>
+<input type="tel" id="phone" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary" placeholder="Enter your phone number">
+</div>
+<div>
+<label class="block text-gray-700 text-sm font-medium mb-2" for="subject">Subject</label>
+<input type="text" id="subject" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary" placeholder="Enter message subject">
+</div>
+<div>
+<label class="block text-gray-700 text-sm font-medium mb-2" for="message">Your Message</label>
+<textarea id="message" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary" placeholder="Write your message here..."></textarea>
+</div>
+<button type="submit" class="w-full bg-primary text-white px-4 py-3 !rounded-button whitespace-nowrap font-medium">Send Message</button>
+</form>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Map Section -->
+<section class="h-[400px] relative">
+<div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://public.readdy.ai/gen_page/map_placeholder_1280x720.png');"></div>
+</section>
+<!-- Footer -->
+<footer class="bg-gray-900 text-white pt-16 pb-8">
+<div class="container mx-auto px-4">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+<div>
+<a href="#" class="text-3xl font-['Pacifico'] text-white mb-4 inline-block">IODE</a>
+<p class="text-gray-400 mb-6">Institute of Open and Distance Education is dedicated to providing accessible and affordable education through distance mode.</p>
+<div class="flex space-x-4">
+<a href="#" class="w-10 h-10 flex items-center justify-center bg-gray-800 rounded-full hover:bg-primary transition">
+<i class="ri-facebook-fill"></i>
+</a>
+<a href="#" class="w-10 h-10 flex items-center justify-center bg-gray-800 rounded-full hover:bg-primary transition">
+<i class="ri-twitter-x-fill"></i>
+</a>
+<a href="#" class="w-10 h-10 flex items-center justify-center bg-gray-800 rounded-full hover:bg-primary transition">
+<i class="ri-instagram-fill"></i>
+</a>
+<a href="#" class="w-10 h-10 flex items-center justify-center bg-gray-800 rounded-full hover:bg-primary transition">
+<i class="ri-linkedin-fill"></i>
+</a>
+</div>
+</div>
+<div>
+<h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+<ul class="space-y-3">
+<li><a href="#" class="text-gray-400 hover:text-white transition">Home</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition">About Us</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition">Courses</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition">Admissions</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition">Downloads</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition">Contact</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition">FAQ</a></li>
+</ul>
+</div>
+<div>
+<h3 class="text-lg font-semibold mb-4">Programs</h3>
+<ul class="space-y-3">
+<li><a href="#" class="text-gray-400 hover:text-white transition">Bachelor of Arts (BA)</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition">Bachelor of Commerce (BCom)</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition">Bachelor of Business Administration (BBA)</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition">Bachelor of Computer Applications (BCA)</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition">Master of Arts (MA)</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition">Master of Commerce (MCom)</a></li>
+<li><a href="#" class="text-gray-400 hover:text-white transition">Master of Business Administration (MBA)</a></li>
+</ul>
+</div>
+<div>
+<h3 class="text-lg font-semibold mb-4">Contact Us</h3>
+<ul class="space-y-3">
+<li class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center mt-1 mr-3">
+<i class="ri-map-pin-line text-primary"></i>
+</div>
+<span class="text-gray-400">Institute of Open and Distance Education<br>New Delhi, India</span>
+</li>
+<li class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center mt-1 mr-3">
+<i class="ri-phone-line text-primary"></i>
+</div>
+<span class="text-gray-400">+91-8800415257</span>
+</li>
+<li class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center mt-1 mr-3">
+<i class="ri-mail-line text-primary"></i>
+</div>
+<span class="text-gray-400">iode.delhi@gmail.com</span>
+</li>
+<li class="flex items-start">
+<div class="w-5 h-5 flex items-center justify-center mt-1 mr-3">
+<i class="ri-global-line text-primary"></i>
+</div>
+<span class="text-gray-400">www.iode.edu.in</span>
+</li>
+</ul>
+</div>
+</div>
+<div class="pt-8 border-t border-gray-800 text-center">
+<p class="text-gray-400">&copy; 2025 Institute of Open and Distance Education. All rights reserved.</p>
+</div>
+</div>
+</footer>
+<!-- WhatsApp Support Button -->
+<div class="fixed bottom-6 right-6 z-50">
+<a href="#" class="w-14 h-14 flex items-center justify-center bg-green-500 rounded-full shadow-lg hover:bg-green-600 transition">
+<i class="ri-whatsapp-line ri-xl text-white"></i>
+</a>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+// Mobile Menu Toggle
+const mobileMenuButton = document.getElementById('mobile-menu-button');
+const mobileMenu = document.getElementById('mobile-menu');
+const loginModal = document.getElementById('login-modal');
+const closeLoginModal = document.getElementById('close-login-modal');
+const studentPortalBtn = document.getElementById('student-portal-btn');
+const mobileStudentPortalBtn = document.getElementById('mobile-student-portal-btn');
+const portalLoginBtn = document.getElementById('portal-login-btn');
+const loginForm = document.getElementById('login-form');
+const loginError = document.getElementById('login-error');
+const loginSpinner = document.getElementById('login-spinner');
+mobileMenuButton.addEventListener('click', function() {
+mobileMenu.classList.toggle('hidden');
+});
+function showLoginModal() {
+loginModal.classList.remove('hidden');
+loginModal.classList.add('flex');
+document.body.style.overflow = 'hidden';
+}
+function hideLoginModal() {
+loginModal.classList.add('hidden');
+loginModal.classList.remove('flex');
+document.body.style.overflow = '';
+loginForm.reset();
+loginError.classList.add('hidden');
+}
+studentPortalBtn.addEventListener('click', showLoginModal);
+mobileStudentPortalBtn.addEventListener('click', showLoginModal);
+portalLoginBtn && portalLoginBtn.addEventListener('click', showLoginModal);
+closeLoginModal.addEventListener('click', hideLoginModal);
+loginModal.addEventListener('click', function(e) {
+if (e.target === loginModal) {
+hideLoginModal();
+}
+});
+loginForm.addEventListener('submit', async function(e) {
+e.preventDefault();
+const studentId = document.getElementById('student-id').value;
+const password = document.getElementById('password').value;
+loginError.classList.add('hidden');
+loginSpinner.classList.remove('hidden');
+// Simulate API call delay
+await new Promise(resolve => setTimeout(resolve, 1000));
+if (studentId === 'IODE12345' && password === '12345') {
+// Show success message
+const toastContainer = document.getElementById('toast-container');
+const toastIcon = document.getElementById('toast-icon');
+const toastMessage = document.getElementById('toast-message');
+toastIcon.className = 'ri-checkbox-circle-line text-green-500 ri-lg';
+toastMessage.textContent = 'Login successful! Redirecting...';
+toastContainer.classList.remove('hidden');
+// Hide modal and reset form
+hideLoginModal();
+// Simulate redirect delay
+setTimeout(() => {
+toastContainer.classList.add('hidden');
+// Here you would typically redirect to the student dashboard
+window.location.href = '#student-dashboard';
+}, 2000);
+} else {
+loginError.textContent = 'Invalid student ID or password';
+loginError.classList.remove('hidden');
+}
+loginSpinner.classList.add('hidden');
+});
+});
+document.addEventListener('DOMContentLoaded', function() {
+// FAQ Toggles
+const faqToggles = document.querySelectorAll('.faq-toggle');
+faqToggles.forEach(toggle => {
+toggle.addEventListener('click', function() {
+const content = this.nextElementSibling;
+const icon = this.querySelector('.faq-icon');
+content.classList.toggle('hidden');
+if (content.classList.contains('hidden')) {
+icon.classList.remove('ri-arrow-up-s-line');
+icon.classList.add('ri-arrow-down-s-line');
+} else {
+icon.classList.remove('ri-arrow-down-s-line');
+icon.classList.add('ri-arrow-up-s-line');
+}
+});
+});
+});
+document.addEventListener('DOMContentLoaded', function() {
+// Result Checker
+const checkResultBtn = document.getElementById('check-result-btn');
+const clearFormBtn = document.getElementById('clear-form-btn');
+const resultDisplay = document.getElementById('result-display');
+const loadingSpinner = document.getElementById('loading-spinner');
+const validationError = document.getElementById('validation-error');
+const requiredFields = [
+{ id: 'year', label: 'Year' },
+{ id: 'program', label: 'Program' },
+{ id: 'semester', label: 'Semester' },
+{ id: 'roll-number', label: 'Roll Number' },
+{ id: 'student-name', label: 'Student Name' },
+{ id: 'father-name', label: "Father's Name" }
+];
+function validateForm() {
+const emptyFields = requiredFields.filter(field => {
+const element = document.getElementById(field.id);
+return !element.value.trim();
+});
+if (emptyFields.length > 0) {
+const errorMessage = `Please fill in the following required fields: ${emptyFields.map(f => f.label).join(', ')}`;
+validationError.textContent = errorMessage;
+validationError.classList.remove('hidden');
+return false;
+}
+validationError.classList.add('hidden');
+return true;
+}
+function clearForm() {
+requiredFields.forEach(field => {
+document.getElementById(field.id).value = '';
+});
+resultDisplay.classList.add('hidden');
+validationError.classList.add('hidden');
+}
+checkResultBtn.addEventListener('click', async function() {
+if (!validateForm()) return;
+// Show loading state
+loadingSpinner.classList.remove('hidden');
+checkResultBtn.disabled = true;
+// Create PDF download button if it doesn't exist
+const existingDownloadBtn = document.querySelector('button[class*="download-marksheet"]');
+if (!existingDownloadBtn) {
+const downloadBtn = document.createElement('button');
+downloadBtn.className = 'w-full bg-white text-primary border border-primary px-4 py-2 !rounded-button whitespace-nowrap font-medium flex items-center justify-center download-marksheet';
+downloadBtn.innerHTML = '<i class="ri-download-line mr-2"></i>Download Marksheet PDF';
+document.getElementById('result-display').appendChild(downloadBtn);
+}
+try {
+// Get form values
+const studentName = document.getElementById('student-name').value;
+const fatherName = document.getElementById('father-name').value;
+const rollNumber = document.getElementById('roll-number').value;
+const program = document.getElementById('program').value;
+const year = document.getElementById('year').value;
+const semester = document.getElementById('semester').value;
+// Simulate API call delay
+await new Promise(resolve => setTimeout(resolve, 1500));
+// Update result display with form values
+document.getElementById('result-name').textContent = studentName;
+document.getElementById('result-father').textContent = fatherName;
+document.getElementById('result-roll').textContent = rollNumber;
+document.getElementById('result-program').textContent = program;
+document.getElementById('result-semester').textContent = `${year} / Semester ${semester}`;
+// Show results
+resultDisplay.classList.remove('hidden');
+} finally {
+// Hide loading state
+loadingSpinner.classList.add('hidden');
+checkResultBtn.disabled = false;
+}
+});
+// Add PDF download functionality with jsPDF
+const downloadMarksheetBtn = document.getElementById('download-marksheet-btn');
+const toastContainer = document.getElementById('toast-container');
+const toastIcon = document.getElementById('toast-icon');
+const toastMessage = document.getElementById('toast-message');
+function showToast(message, isSuccess = true) {
+toastIcon.className = isSuccess ? 'ri-checkbox-circle-line text-green-500 ri-lg' : 'ri-error-warning-line text-red-500 ri-lg';
+toastMessage.textContent = message;
+toastContainer.classList.remove('hidden');
+setTimeout(() => {
+toastContainer.classList.add('hidden');
+}, 3000);
+}
+if (downloadMarksheetBtn) {
+downloadMarksheetBtn.addEventListener('click', async function() {
+const { jsPDF } = window.jspdf;
+// Create a promise to handle PDF generation
+const generatePDF = () => {
+return new Promise((resolve) => {
+const doc = new jsPDF();
+// Set font styles
+doc.setFont("helvetica");
+// Add institute logo and header
+doc.setFontSize(20);
+doc.setTextColor(59, 130, 246); // primary color
+doc.text("IODE", 105, 20, { align: "center" });
+doc.setFontSize(12);
+doc.setTextColor(0);
+doc.text("Institute of Open and Distance Education", 105, 30, { align: "center" });
+doc.text("Student Result Sheet", 105, 40, { align: "center" });
+// Add horizontal line
+doc.setLineWidth(0.5);
+doc.line(20, 45, 190, 45);
+// Student details
+doc.setFontSize(11);
+const studentDetails = [
+["Name:", document.getElementById('result-name').textContent],
+["Roll Number:", document.getElementById('result-roll').textContent],
+["Father's Name:", document.getElementById('result-father').textContent],
+["Program:", document.getElementById('result-program').textContent],
+["Year/Semester:", document.getElementById('result-semester').textContent]
+];
+let yPos = 60;
+studentDetails.forEach(([label, value]) => {
+doc.text(label, 30, yPos);
+doc.text(value, 80, yPos);
+yPos += 10;
+});
+// Subject marks table
+yPos += 10;
+doc.setFillColor(240, 240, 240);
+doc.rect(30, yPos, 150, 10, 'F');
+doc.text("Subject", 35, yPos + 7);
+doc.text("Marks", 120, yPos + 7);
+doc.text("Max", 160, yPos + 7);
+const subjects = [
+["Indian Polity", "76", "100"],
+["English Literature", "88", "100"],
+["Economics", "82", "100"]
+];
+yPos += 10;
+subjects.forEach(([subject, marks, max]) => {
+doc.text(subject, 35, yPos + 7);
+doc.text(marks, 120, yPos + 7);
+doc.text(max, 160, yPos + 7);
+yPos += 10;
+});
+// Total and percentage
+yPos += 10;
+doc.text("Total:", 35, yPos + 7);
+doc.text("246/300", 120, yPos + 7);
+yPos += 10;
+doc.text("Percentage:", 35, yPos + 7);
+doc.text("82%", 120, yPos + 7);
+// Result status
+yPos += 10;
+doc.setTextColor(39, 174, 96);
+doc.text("Result: PASS", 35, yPos + 7);
+// Official signatures
+yPos += 30;
+doc.setTextColor(0);
+doc.text("Controller of Examinations", 50, yPos, { align: "center" });
+doc.text("Director", 160, yPos, { align: "center" });
+// Add digital signatures (placeholder lines)
+doc.line(30, yPos - 10, 70, yPos - 10);
+doc.line(140, yPos - 10, 180, yPos - 10);
+// Add footer
+doc.setFontSize(8);
+doc.text("This is a computer-generated document. No signature is required.", 105, 280, { align: "center" });
+doc.text("Document generated on: " + new Date().toLocaleDateString(), 105, 285, { align: "center" });
+// Save the PDF
+const studentName = document.getElementById('student-name').value;
+const rollNumber = document.getElementById('roll-number').value;
+doc.save(`Marksheet_${rollNumber}_${studentName}.pdf`);
+resolve();
+});
+};
+// Show loading state while generating PDF
+const pdfLoadingSpinner = document.createElement('div');
+pdfLoadingSpinner.innerHTML = '<i class="ri-loader-4-line animate-spin"></i>';
+pdfLoadingSpinner.className = 'ml-2';
+downloadMarksheetBtn.appendChild(pdfLoadingSpinner);
+downloadMarksheetBtn.disabled = true;
+try {
+await generatePDF();
+showToast('Marksheet PDF downloaded successfully');
+} catch (error) {
+console.error('Error generating PDF:', error);
+showToast('Failed to generate PDF. Please try again.', false);
+} finally {
+// Remove loading spinner and re-enable button
+downloadMarksheetBtn.removeChild(pdfLoadingSpinner);
+downloadMarksheetBtn.disabled = false;
+}
+});
+}
+clearFormBtn.addEventListener('click', clearForm);
+});
+</script>
+</body>
+</html>
